@@ -29,5 +29,8 @@ var app = (function () {
         };
     };
 
+    angular.module('appMain', []);
     return app;
+
+    
 })();

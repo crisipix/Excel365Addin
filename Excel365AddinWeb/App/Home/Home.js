@@ -9,6 +9,7 @@
             app.initialize();
 
             $('#get-data-from-selection').click(getDataFromSelection);
+            $('#send-data-from-selection').click(sendDataFromSelection)
         });
     };
 
@@ -17,11 +18,30 @@
         Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
             function (result) {
                 if (result.status === Office.AsyncResultStatus.Succeeded) {
-                    app.showNotification('The selected text is:', '"' + result.value + '"');
+                    if (result.value === '')
+                    {
+                        app.showNotification('There was no selected text');
+                    }
+                    else { app.showNotification('The selected text is:', '"' + result.value + '"'); }
                 } else {
                     app.showNotification('Error:', result.error.message);
                 }
             }
         );
+    }
+
+    function sendDataFromSelection()
+    {
+        Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
+           function (result) {
+               if (result.status === Office.AsyncResultStatus.Succeeded) {
+                   if (result.value === '') {
+                       app.showNotification('There was no selected text');
+                   }
+                   else { app.showNotification('The selected text is:', '"' + result.value + '"'); }
+               } else {
+                   app.showNotification('Error:', result.error.message);
+               }
+           });
     }
 })();

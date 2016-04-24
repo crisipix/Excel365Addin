@@ -14,7 +14,7 @@
     <RootNamespace>Excel365AddinWeb</RootNamespace>
     <AssemblyName>Excel365AddinWeb</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort>44301</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -71,10 +71,13 @@
     <Content Include="App\Home\Home.css" />
     <Content Include="App\Home\Home.html" />
     <Content Include="App\Home\Home.js" />
+    <Content Include="App\Management\Manage.html" />
+    <Content Include="App\Management\ManageController.js" />
     <Content Include="Content\Office.css" />
     <Content Include="Images\Close.png" />
     <Content Include="packages.config" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
@@ -356,7 +359,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56098</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:56098/</IISUrl>
+          <IISUrl>http://localhost/Excel365AddinWeb</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
