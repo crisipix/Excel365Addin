@@ -1,54 +1,92 @@
 ﻿(function () {
+    Office.initialize = function (reason) {
 
-    var manageCtrl = function ($scope) {
+    };
+});
+
+(function () {
+    
+    var managerService = function ($q) {
+        //Reads data from current document selection and displays a notification
+        this.getDataFromSelection = function () {
+            var deferred = $q.defer();
+            Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
+               function (result) {
+                   if (result.status === Office.AsyncResultStatus.Succeeded) {
+                       deferred.resolve(result.value.split('\n'));
+                   }
+                   else {
+                       deferred.reject([]);
+                   }
+               });
+            return deferred.promise;
+        }
+
+        this.sendDataFromSelection = function () {
+            var deferred = $q.defer();
+            Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
+               function (result) {
+                   if (result.status === Office.AsyncResultStatus.Succeeded) {
+                       deferred.resolve(result.value.split('\n'));
+                   }
+                    else {
+                       deferred.reject([]);
+                   }
+               });
+            return deferred.promise;
+        }
+
+    }
+
+    var manageCtrl = function ($scope, managerService) {
         var vm = this;
         vm.Hello = 'Person';
         vm.showMessage = false;
         vm.message = {header:'', body:''};
         vm.test = function() { vm.showMessage = true; vm.message.body ="HELLOOOOOO" };
         vm.results = [];
+        $scope.$watchCollection('results', function (newValue, oldValue) { vm.results = newValue; });
 
-         //Reads data from current document selection and displays a notification
         function getDataFromSelection() {
-            Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
+            managerService.getDataFromSelection().then(
                 function (result) {
-                    if (result.status === Office.AsyncResultStatus.Succeeded) {
-                        vm.showMessage = true;
-                        if (result.value === '') {
-                            vm.message.body = 'There was no selected text';
-                        }
-                        else {
-                            vm.message = { header: 'The selected text is:', body: result.value };
-                            vm.results = result.value.split('\n');
-                        }
-                    } else {
-                        vm.message = { header: 'Error:', body: result.error.message };
+                    vm.showMessage = true;
+
+                    if (result.length === 0) {
+                        vm.message.body = 'There was no selected text';
                     }
-                    $scope.$apply();
+                    else {
+                        vm.message = { header: 'The selected text was sent to the server:', body: result.join(' ')  };
+                        vm.results = result;
+                    }
+                },
+                function (error) {
+                    vm.message = { header: 'Error:', body: error.message };
                 }
-            );
+                );
+           
+
         }
 
         function sendDataFromSelection() {
-            Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
+            managerService.sendDataFromSelection().then(
                function (result) {
-                   if (result.status === Office.AsyncResultStatus.Succeeded) {
-                       vm.showMessage = true;
+                   vm.showMessage = true;
 
-                       if (result.value === '') {
-                           vm.message.body = 'There was no selected text';
-                       }
-                       else {
-                           vm.message = { header: 'The selected text was sent to the server:', body: result.value };
-                           vm.results = result.value.split('\n');
-
-
-                       }
-                   } else {
-                       vm.message ={header : 'Error:', body : result.error.message};
+                   if (result.length === 0) {
+                       vm.message.body = 'There was no selected text';
                    }
-                   $scope.$apply();
-               });
+                   else {
+                       vm.message = { header: 'The selected text was sent to the server:', body: result.join(' ') };
+                       vm.results = result;
+
+                      // $scope.$apply();
+                   }
+               },
+               function (error) {
+                   vm.message = { header: 'Error:', body: error.message };
+               }
+               );
         }
 
         vm.getDataFromSelection = getDataFromSelection;
@@ -57,6 +95,7 @@
 
     }
 
+    angular.module('appMain').service('managerService', managerService);
     angular.module('appMain').controller('manageCtrl', manageCtrl);
 
 })();
