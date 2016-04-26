@@ -31,7 +31,7 @@
             <div class="padding">
                 <p><strong>Add home screen content here.</strong></p>
                 <p>For example:</p>
-                <button id="get-data-from-selection" ng-click="vm.getDataFromSelection();">Get data from selection</button>
+                <button id="get-data-from-selection" ng-click="vm.sendDataFromSelection();">Get data from selection</button>
                 <button id="send-data-from-selection" ng-click="vm.sendDataFromSelection();">Send selected data to server</button>
                 <button id="test" ng-click="vm.test();">{{vm.Hello}}</button>
 
@@ -51,7 +51,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="result in vm.results">
+                    <!-- prevent ng-repeat from throwing dups error. -->
+                    <tr class="resultsRow" ng-repeat="result in vm.results  track by $index">
                         <td>{{result}}</td>
                     </tr>
                 </tbody>
